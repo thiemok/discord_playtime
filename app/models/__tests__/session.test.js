@@ -124,16 +124,16 @@ describe('Session model', () => {
 	test('returns correct PlayerRecords for existing game', () => {
 		const expectedRecords = [
 			{ _id: '1', total: millisPerDay / 3 },
-			{ _id: '2', total: millisPerDay / 6 },
+			{ _id: '2', total: millisPerDay / 4 },
 		];
-		return expect(Session.findPlayerRecordsForGame('Game1'))
+		return expect(Session.findPlayerRecordsForGame('Game1', '1'))
 			.resolves
 			.toEqual(expectedRecords);
 	});
 
 	test('returns untracked game message for unknown game', () => {
 		const expectedError = 'I have never seen anyone play that game, please try again later';
-		return expect(Session.findPlayerRecordsForGame('Game0'))
+		return expect(Session.findPlayerRecordsForGame('Game0', '1'))
 			.rejects
 			.toEqual(expectedError);
 	});

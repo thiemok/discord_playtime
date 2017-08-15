@@ -61,6 +61,44 @@ sessionSchema.statics.findGameRecordsForPlayer = function(id: string): Promise<G
 	return pResult;
 };
 
+/**
+ * Fetches PlayerRecords for each player that has played
+ * the game with the given name on the given guild.
+ * Records are sorted by total time played
+ * @param  {string}                     id     The name of the game to find records for
+ * @param  {string}                     guild  The guild to search for
+ * @return {Promise<PlayerRecord[]>}    PlayerRecords for each player recorded for the game
+ */
+sessionSchema.statics.findPlayerRecordsForGame = function(id: string, guild: string): Promise<PlayerRecord[]> {
+	logger.debug('Querying players for game %s', id);
+
+	const query = this.aggregate(
+		[
+			{ $match: { game: id, guilds: guild } },
+			{ $group: { _id: '$uid', total: { $sum: '$duration' } } },
+			{ $sort: { total: -1 } },
+		])
+		.cursor({});
+
+	const pResult = new Promise((resolve, reject) => {
+		const records = [];
+		query.exec()
+			.eachAsync(doc => records.push(doc))
+			.then(() => {
+				if (records.length === 0) {
+					// No data available
+					reject('I have never seen anyone play that game, please try again later');
+				} else {
+					resolve(records);
+				}
+			}).catch((err) => {
+				logger.error('Failed Database Query\n%s', err);
+				reject('Error querying database. Please try again later');
+			});
+	});
+	return pResult;
+};
+
 const Session = mongoose.model('Session', sessionSchema);
 
 export default Session;
