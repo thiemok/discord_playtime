@@ -44,7 +44,7 @@ const prepareTestData = async () => {
 			game: 'Game1',
 			duration: millisPerDay / 6,
 			ended: now - (3 * millisPerDay),
-			guilds: ['1'],
+			guilds: ['1', '2'],
 		},
 		{
 			uid: '3',
@@ -114,11 +114,10 @@ describe('Session model', () => {
 			.toEqual(expectedRecords);
 	});
 
-	test('returns untracked user message for unknown user', () => {
-		const expectedError = 'I have never seen that user play, please try again later';
+	test('returns empty array for unknown user', () => {
 		return expect(Session.findGameRecordsForPlayer('0'))
-			.rejects
-			.toEqual(expectedError);
+			.resolves
+			.toEqual([]);
 	});
 
 	test('returns correct PlayerRecords for existing game', () => {
@@ -131,20 +130,19 @@ describe('Session model', () => {
 			.toEqual(expectedRecords);
 	});
 
-	test('returns untracked game message for unknown game', () => {
-		const expectedError = 'I have never seen anyone play that game, please try again later';
+	test('returns empty array for unknown game', () => {
 		return expect(Session.findPlayerRecordsForGame('Game0', '1'))
-			.rejects
-			.toEqual(expectedError);
+			.resolves
+			.toEqual([]);
 	});
 
 	test('returns top 5 players for a given guild', () => {
 		const expectedRecords = [
 			{ _id: '1', total: (millisPerDay / 3) + (millisPerDay / 4) },
 			{ _id: '2', total: (millisPerDay / 4) },
-			{ _id: '7', total: (millisPerDay / 6) },
-			{ _id: '5', total: (millisPerDay / 6) },
 			{ _id: '4', total: (millisPerDay / 6) },
+			{ _id: '5', total: (millisPerDay / 6) },
+			{ _id: '7', total: (millisPerDay / 6) },
 		];
 		return expect(Session.findTopPlayersForGuild('1'))
 			.resolves
@@ -155,8 +153,8 @@ describe('Session model', () => {
 		const expectedRecords = [
 			{ _id: 'Game1', total: (millisPerDay / 4) + (millisPerDay / 3) },
 			{ _id: 'Game2', total: (millisPerDay / 4) },
-			{ _id: 'Game4', total: (millisPerDay / 6) },
 			{ _id: 'Game3', total: (millisPerDay / 6) },
+			{ _id: 'Game4', total: (millisPerDay / 6) },
 			{ _id: 'Game6', total: (millisPerDay / 6) },
 		];
 		return expect(Session.findTopGamesForGuild('1'))
@@ -174,9 +172,26 @@ describe('Session model', () => {
 			.toEqual(expectedTime);
 	});
 
-	test('returns all sessions for a given guild', () => {
-		return expect(Session.findAllDataForGuild('1'))
-			.resloves
-			.toHaveLength(testSessions.length - 1);
+	test('returns all sessions for a given guild', (done) => {
+		const expectedSessions = [
+			{ ended: Date('2015-06-13T22:12:05.275Z'), duration: 14400000, game: 'Game1', uid: '1' },
+			{ ended: Date('2015-06-13T22:12:05.275Z'), duration: 21600000, game: 'Game1', uid: '2' },
+			{ ended: Date('2015-06-12T22:12:05.275Z'), duration: 21600000, game: 'Game2', uid: '1' },
+			{ ended: Date('2015-06-11T22:12:05.275Z'), duration: 14400000, game: 'Game1', uid: '1' },
+			{ ended: Date('2015-06-11T22:12:05.275Z'), duration: 14400000, game: 'Game3', uid: '4' },
+			{ ended: Date('2015-06-11T22:12:05.275Z'), duration: 14400000, game: 'Game4', uid: '5' },
+			{ ended: Date('2015-06-11T22:12:05.275Z'), duration: 10800000, game: 'Game5', uid: '6' },
+			{ ended: Date('2015-06-11T22:12:05.275Z'), duration: 14400000, game: 'Game6', uid: '7' },
+		];
+		Session.allSessionsForGuild('1')
+			.then((sessions) => {
+				expect(sessions).toEqual(expect.arrayContaining(expectedSessions));
+				expect(sessions.length).toEqual(testSessions.length - 1);
+				done();
+			}).catch((err) => {
+				// Fail by default here
+				fail('Got error when there should not have been one:\n' + err);
+				done();
+			});
 	});
 });
