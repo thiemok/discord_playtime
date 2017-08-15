@@ -153,10 +153,10 @@ describe('Session model', () => {
 
 	test('returns top 5 games for a given guild', () => {
 		const expectedRecords = [
-			{ _id: 'Game1', total: (millisPerDay / 2) + (millisPerDay / 3) },
+			{ _id: 'Game1', total: (millisPerDay / 4) + (millisPerDay / 3) },
 			{ _id: 'Game2', total: (millisPerDay / 4) },
-			{ _id: 'Game3', total: (millisPerDay / 6) },
 			{ _id: 'Game4', total: (millisPerDay / 6) },
+			{ _id: 'Game3', total: (millisPerDay / 6) },
 			{ _id: 'Game6', total: (millisPerDay / 6) },
 		];
 		return expect(Session.findTopGamesForGuild('1'))

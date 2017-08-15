@@ -130,6 +130,37 @@ sessionSchema.statics.findTopPlayersForGuild = function(guild: string): Promise<
 	return pResult;
 };
 
+/**
+ * Fetches GameRecords for the 5 games with the most time played on the given guild
+ * @param  {string}                      guild The guild to search on
+ * @return {Promise<GameRecord[]>}       GameRecords of the 5 most played games on the given guild
+ */
+sessionSchema.statics.findTopGamesForGuild = function(guild: string): Promise<GameRecord[]> {
+	logger.debug('Querying top games for server %s', guild);
+
+	const query = this.aggregate(
+		[
+			{ $match: { guilds: guild } },
+			{ $group: { _id: '$game', total: { $sum: '$duration' } } },
+			{ $sort: { total: -1 } },
+			{ $limit: 5 },
+		])
+		.cursor({});
+
+	const pResult = new Promise((resolve, reject) => {
+		const records = [];
+		query.exec()
+			.eachAsync(doc => records.push(doc))
+			.then(() => {
+				resolve(records);
+			}).catch((err) => {
+				logger.error('Failed Database Query\n%s', err);
+				reject('Error querying database. Please try again later');
+			});
+	});
+	return pResult;
+};
+
 const Session = mongoose.model('Session', sessionSchema);
 
 export default Session;
