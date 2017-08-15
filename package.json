@@ -21,6 +21,9 @@
     "type": "git",
     "url": "https://github.com/thiemok/discord_playtime"
   },
+  "jest": {
+    "testEnvironment": "node"
+  },
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-eslint": "^7.2.3",
@@ -36,7 +39,8 @@
     "flow-typed": "^2.1.5",
     "jest": "^20.0.4",
     "jest-environment-node-debug": "^2.0.0",
-    "mockdate": "^2.0.1"
+    "mockdate": "^2.0.1",
+    "mockgoose": "^7.3.3"
   },
   "dependencies": {
     "async": "^2.5.0",
@@ -52,6 +56,6 @@
     "discord.js": "^11.1.0",
     "express": "^4.15.3",
     "igdb-api-node": "^3.0.1",
-    "mongodb": "^2.2.30"
+    "mongoose": "^4.11.5"
   }
 }
