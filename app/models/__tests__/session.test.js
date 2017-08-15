@@ -142,9 +142,9 @@ describe('Session model', () => {
 		const expectedRecords = [
 			{ _id: '1', total: (millisPerDay / 3) + (millisPerDay / 4) },
 			{ _id: '2', total: (millisPerDay / 4) },
-			{ _id: '4', total: (millisPerDay / 6) },
-			{ _id: '5', total: (millisPerDay / 6) },
 			{ _id: '7', total: (millisPerDay / 6) },
+			{ _id: '5', total: (millisPerDay / 6) },
+			{ _id: '4', total: (millisPerDay / 6) },
 		];
 		return expect(Session.findTopPlayersForGuild('1'))
 			.resolves
