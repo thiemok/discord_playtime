@@ -2,7 +2,7 @@ module.exports = {
 	"extends": "airbnb-base",
 	"parser": "babel-eslint",
 	"parserOptions": {
-		"ecmaVersion": 6,
+		"ecmaVersion": 8,
 		"sourceType": "module",
 		"ecmaFeatures": {
 			"blockBindings": true
@@ -14,7 +14,7 @@ module.exports = {
 	],
 	"env": {
 		"node": true,
-		"mocha": true,
+		"jest": true,
 		"es6": true
 	},
 	"rules": {
@@ -91,7 +91,11 @@ module.exports = {
 		"prefer-template": 0,
 		"quotes": [1, "single", "avoid-escape"],
 		"radix": 0,
-		"space-before-function-paren": [1, "never"],
+		"space-before-function-paren": [1, {
+			"asyncArrow": "always",
+			"anonymous": "never",
+      "named": "never"
+		}],
 		"import/no-extraneous-dependencies": 0,
 		"import/extensions": 0,
 		"import/first": 0,
