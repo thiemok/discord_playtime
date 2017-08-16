@@ -93,7 +93,8 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-	return mockgoose.helper.reset();
+	await mockgoose.helper.reset();
+	return mongoose.connection.close();
 });
 
 describe('Session model', () => {
@@ -193,5 +194,31 @@ describe('Session model', () => {
 				fail('Got error when there should not have been one:\n' + err);
 				done();
 			});
+	});
+
+	test('does not fail on empty database', async () => {
+		// Reset db
+		await mockgoose.helper.reset();
+		await mongoose.connection.close();
+		await mongoose.connect('mongodb://localhost/test');
+		expect.assertions(6);
+		await expect(Session.findGameRecordsForPlayer('0'))
+			.resolves
+			.toEqual([]);
+		await expect(Session.findPlayerRecordsForGame('Game0', '1'))
+			.resolves
+			.toEqual([]);
+		await expect(Session.findTopPlayersForGuild('1'))
+			.resolves
+			.toEqual([]);
+		await expect(Session.findTopGamesForGuild('1'))
+			.resolves
+			.toEqual([]);
+		await expect(Session.findTotalTimeForGuild('1'))
+			.resolves
+			.toEqual(0);
+		await expect(Session.allSessionsForGuild('1'))
+			.resolves
+			.toEqual([]);
 	});
 });

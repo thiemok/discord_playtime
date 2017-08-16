@@ -2,7 +2,7 @@
 import mongoose from 'mongoose';
 import logging from 'util/log';
 
-const ERROR_LOG_FORMAT = 'Failed Database Query\n%s';
+const ERROR_LOG_FORMAT = 'Failed Database Query: %s\n%s';
 
 const logger = logging('playtime:db:sessions');
 const Schema = mongoose.Schema;
@@ -93,7 +93,7 @@ sessionSchema.statics.findGameRecordsForPlayer = function(id: string): Promise<G
 			.then(() => {
 				resolve(records);
 			}).catch((err) => {
-				logger.error(ERROR_LOG_FORMAT, err);
+				logger.error(ERROR_LOG_FORMAT, 'findGameRecordsForPlayer', err);
 				reject(err);
 			});
 	});
@@ -126,7 +126,7 @@ sessionSchema.statics.findPlayerRecordsForGame = function(id: string, guild: str
 			.then(() => {
 				resolve(records);
 			}).catch((err) => {
-				logger.error(ERROR_LOG_FORMAT, err);
+				logger.error(ERROR_LOG_FORMAT, 'findPlayerRecordsForGame', err);
 				reject(err);
 			});
 	});
@@ -157,7 +157,7 @@ sessionSchema.statics.findTopPlayersForGuild = function(guild: string): Promise<
 			.then(() => {
 				resolve(records);
 			}).catch((err) => {
-				logger.error(ERROR_LOG_FORMAT, err);
+				logger.error(ERROR_LOG_FORMAT, 'findTopPlayersForGuild', err);
 				reject(err);
 			});
 	});
@@ -188,7 +188,7 @@ sessionSchema.statics.findTopGamesForGuild = function(guild: string): Promise<Ga
 			.then(() => {
 				resolve(records);
 			}).catch((err) => {
-				logger.error(ERROR_LOG_FORMAT, err);
+				logger.error(ERROR_LOG_FORMAT, 'findTopGamesForGuild', err);
 				reject(err);
 			});
 	});
@@ -212,9 +212,9 @@ sessionSchema.statics.findTotalTimeForGuild = function(guild: string): Promise<n
 	const pResult = new Promise((resolve, reject) => {
 		query.exec()
 			.next()
-			.then(doc => resolve(doc.total))
+			.then(doc => resolve((doc) ? doc.total : 0))
 			.catch((err) => {
-				logger.error(ERROR_LOG_FORMAT, err);
+				logger.error(ERROR_LOG_FORMAT, 'findTotalTimeForGuild', err);
 				reject(err);
 			});
 	});
@@ -243,7 +243,7 @@ sessionSchema.statics.allSessionsForGuild = function(guild: string): Promise<Exp
 			}).then(() => {
 				resolve(sessions);
 			}).catch((err) => {
-				logger.error(ERROR_LOG_FORMAT, err);
+				logger.error(ERROR_LOG_FORMAT, 'allSessionsForGuild', err);
 				reject(err);
 			});
 	});
