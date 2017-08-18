@@ -113,7 +113,7 @@ class Updater {
 		});
 
 		// Act on Users changeing state
-		this.client.on('presenceUpdate', this.presenceUpdated);
+		this.client.on('presenceUpdate', this.presenceUpdated.bind(this));
 	}
 
 	// Stop tracking user presences

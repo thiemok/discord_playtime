@@ -135,7 +135,7 @@ function gracefulExit() {
 
 function uncaughtException(err) {
 	// We can't close sessions here since it async
-	logger.error('(╯°□°）╯︵ ┻━┻\n%s', err);
+	logger.error('(╯°□°）╯︵ ┻━┻\n%s\n%s', err, err.stack);
 	// Logout
 	client.destroy();
 }
