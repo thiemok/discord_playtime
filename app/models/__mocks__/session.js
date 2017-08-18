@@ -20,6 +20,9 @@ Session.create = jest.fn((data) => {
 	return Promise.resolve();
 });
 Session.findGameRecordsForPlayer = jest.fn(id => Promise.resolve(mockData.gamesForPlayer));
+Session.findTopPlayersForGuild = jest.fn(id => Promise.resolve(mockData.topPlayers));
+Session.findTopGamesForGuild = jest.fn(id => Promise.resolve(mockData.topGames));
+Session.findTotalTimeForGuild = jest.fn(id => Promise.resolve(mockData.totalTimeplayed));
 
 Session.__setMockData = __setMockData;
 Session.__getMockData = __getMockData;
