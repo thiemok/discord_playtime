@@ -15,6 +15,7 @@ module.exports = {
 	"env": {
 		"node": true,
 		"jest": true,
+		"jasmine": true,
 		"es6": true
 	},
 	"rules": {
@@ -105,6 +106,7 @@ module.exports = {
 				"constants.*",
 				"app.*",
 				"util.*",
+				"models.*",
 				"commands"
 			]
 		}],
