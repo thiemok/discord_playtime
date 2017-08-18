@@ -1,6 +1,3 @@
-/* eslint-env jasmine */
-/* eslint-env jest */
-
 import mongoose from 'mongoose';
 import { Mockgoose } from 'mockgoose';
 import MockDate from 'mockdate';
@@ -100,6 +97,7 @@ afterAll(async () => {
 describe('Session model', () => {
 
 	test('saves correctly', () => {
+		expect.assertions(1);
 		return expect(Session.find().exec())
 			.resolves
 			.toHaveLength(testSessions.length);
@@ -110,12 +108,15 @@ describe('Session model', () => {
 			{ _id: 'Game1', total: millisPerDay / 3 },
 			{ _id: 'Game2', total: millisPerDay / 4 },
 		];
+
+		expect.assertions(1);
 		return expect(Session.findGameRecordsForPlayer('1'))
 			.resolves
 			.toEqual(expectedRecords);
 	});
 
 	test('returns empty array for unknown user', () => {
+		expect.assertions(1);
 		return expect(Session.findGameRecordsForPlayer('0'))
 			.resolves
 			.toEqual([]);
@@ -126,12 +127,15 @@ describe('Session model', () => {
 			{ _id: '1', total: millisPerDay / 3 },
 			{ _id: '2', total: millisPerDay / 4 },
 		];
+
+		expect.assertions(1);
 		return expect(Session.findPlayerRecordsForGame('Game1', '1'))
 			.resolves
 			.toEqual(expectedRecords);
 	});
 
 	test('returns empty array for unknown game', () => {
+		expect.assertions(1);
 		return expect(Session.findPlayerRecordsForGame('Game0', '1'))
 			.resolves
 			.toEqual([]);
@@ -145,6 +149,8 @@ describe('Session model', () => {
 			{ _id: '5', total: (millisPerDay / 6) },
 			{ _id: '7', total: (millisPerDay / 6) },
 		];
+
+		expect.assertions(1);
 		return expect(Session.findTopPlayersForGuild('1'))
 			.resolves
 			.toEqual(expectedRecords);
@@ -158,6 +164,8 @@ describe('Session model', () => {
 			{ _id: 'Game4', total: (millisPerDay / 6) },
 			{ _id: 'Game6', total: (millisPerDay / 6) },
 		];
+
+		expect.assertions(1);
 		return expect(Session.findTopGamesForGuild('1'))
 			.resolves
 			.toEqual(expectedRecords);
@@ -168,12 +176,14 @@ describe('Session model', () => {
 		testSessions.forEach((session) => {
 			if (session.guilds[0] === '1') expectedTime += session.duration;
 		});
+
+		expect.assertions(1);
 		return expect(Session.findTotalTimeForGuild('1'))
 			.resolves
 			.toEqual(expectedTime);
 	});
 
-	test('returns all sessions for a given guild', (done) => {
+	test('returns all sessions for a given guild', async () => {
 		const expectedSessions = [
 			{ ended: Date('2015-06-13T22:12:05.275Z'), duration: 14400000, game: 'Game1', uid: '1' },
 			{ ended: Date('2015-06-13T22:12:05.275Z'), duration: 21600000, game: 'Game1', uid: '2' },
@@ -184,16 +194,11 @@ describe('Session model', () => {
 			{ ended: Date('2015-06-11T22:12:05.275Z'), duration: 10800000, game: 'Game5', uid: '6' },
 			{ ended: Date('2015-06-11T22:12:05.275Z'), duration: 14400000, game: 'Game6', uid: '7' },
 		];
-		Session.allSessionsForGuild('1')
-			.then((sessions) => {
-				expect(sessions).toEqual(expect.arrayContaining(expectedSessions));
-				expect(sessions.length).toEqual(testSessions.length - 1);
-				done();
-			}).catch((err) => {
-				// Fail by default here
-				fail('Got error when there should not have been one:\n' + err);
-				done();
-			});
+
+		expect.assertions(2);
+		const sessions = await Session.allSessionsForGuild('1');
+		expect(sessions).toEqual(expect.arrayContaining(expectedSessions));
+		expect(sessions.length).toEqual(testSessions.length - 1);
 	});
 
 	test('does not fail on empty database', async () => {
