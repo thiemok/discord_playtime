@@ -19,6 +19,7 @@ Session.create = jest.fn((data) => {
 	}
 	return Promise.resolve();
 });
+Session.findGameRecordsForPlayer = jest.fn(id => Promise.resolve(mockData.gamesForPlayer));
 
 Session.__setMockData = __setMockData;
 Session.__getMockData = __getMockData;
