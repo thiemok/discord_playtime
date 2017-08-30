@@ -1,5 +1,6 @@
 /* eslint-env jest */
-import generateEmbeds from '../embedHelpers';
+import generateEmbeds from 'util/embedHelpers';
+import { RichEmbed } from 'discord.js';
 import MockDate from 'mockdate';
 
 beforeAll(() => {
@@ -21,17 +22,11 @@ const generateStringOfLength = (length) => {
 describe('EmbedHelpers', () => {
 
 	test('generates defaults correctly', () => {
-		const expectedEmbed = {
-			color: 0,
-			timestamp: Date().toISOString(),
-			thumbnail: {
-				url: 'https://cdn.discordapp.com/embed/avatars/0.png',
-			},
-			footer: {
-				icon_url: 'https://assets-cdn.github.com/favicon.ico',
-				text: 'Powered by discord-playtime',
-			},
-		};
+		const expectedEmbed = new RichEmbed()
+			.setColor('DEFAULT')
+			.setTimestamp()
+			.setThumbnail('https://cdn.discordapp.com/embed/avatars/0.png')
+			.setFooter('Powered by discord-playtime', 'https://assets-cdn.github.com/favicon.ico');
 
 		expect.assertions(1);
 		return expect(generateEmbeds({}))
@@ -48,22 +43,12 @@ describe('EmbedHelpers', () => {
 			},
 		};
 
-		const expectedEmbed = {
-			color: 0,
-			timestamp: Date().toISOString(),
-			thumbnail: {
-				url: 'https://cdn.discordapp.com/embed/avatars/0.png',
-			},
-			footer: {
-				icon_url: 'https://assets-cdn.github.com/favicon.ico',
-				text: 'Powered by discord-playtime',
-			},
-			author: {
-				name: 'Test',
-				url: 'https://discordapp.com',
-				icon_url: 'https://cdn.discordapp.com/embed/avatars/0.png',
-			},
-		};
+		const expectedEmbed = new RichEmbed()
+			.setColor('DEFAULT')
+			.setTimestamp()
+			.setThumbnail('https://cdn.discordapp.com/embed/avatars/0.png')
+			.setFooter('Powered by discord-playtime', 'https://assets-cdn.github.com/favicon.ico')
+			.setAuthor('Test', 'https://discordapp.com', 'https://cdn.discordapp.com/embed/avatars/0.png');
 
 		expect.assertions(1);
 		return expect(generateEmbeds(sourceData))
@@ -79,23 +64,12 @@ describe('EmbedHelpers', () => {
 				icon_url: 'https://cdn.discordapp.com/embed/avatars/0.png',
 			},
 		};
-
-		const expectedEmbed = {
-			color: 0,
-			timestamp: Date().toISOString(),
-			thumbnail: {
-				url: 'https://cdn.discordapp.com/embed/avatars/0.png',
-			},
-			footer: {
-				icon_url: 'https://assets-cdn.github.com/favicon.ico',
-				text: 'Powered by discord-playtime',
-			},
-			author: {
-				name: generateStringOfLength(256),
-				url: 'https://discordapp.com',
-				icon_url: 'https://cdn.discordapp.com/embed/avatars/0.png',
-			},
-		};
+		const expectedEmbed = new RichEmbed()
+			.setColor('DEFAULT')
+			.setTimestamp()
+			.setThumbnail('https://cdn.discordapp.com/embed/avatars/0.png')
+			.setFooter('Powered by discord-playtime', 'https://assets-cdn.github.com/favicon.ico')
+			.setAuthor(generateStringOfLength(256), 'https://discordapp.com', 'https://cdn.discordapp.com/embed/avatars/0.png');
 
 		expect.assertions(1);
 		return expect(generateEmbeds(sourceData))
@@ -108,17 +82,11 @@ describe('EmbedHelpers', () => {
 			color: 2,
 		};
 
-		const expectedEmbed = {
-			color: 2,
-			timestamp: Date().toISOString(),
-			thumbnail: {
-				url: 'https://cdn.discordapp.com/embed/avatars/0.png',
-			},
-			footer: {
-				icon_url: 'https://assets-cdn.github.com/favicon.ico',
-				text: 'Powered by discord-playtime',
-			},
-		};
+		const expectedEmbed = new RichEmbed()
+			.setColor(2)
+			.setTimestamp()
+			.setThumbnail('https://cdn.discordapp.com/embed/avatars/0.png')
+			.setFooter('Powered by discord-playtime', 'https://assets-cdn.github.com/favicon.ico');
 
 		expect.assertions(1);
 		return expect(generateEmbeds(sourceData))
@@ -128,22 +96,14 @@ describe('EmbedHelpers', () => {
 
 	test('Sets thumbnail', () => {
 		const sourceData = {
-			thumbnail: {
-				url: 'https://cdn.discordapp.com/embed/avatars/1.png',
-			},
+			thumbnail: 'https://cdn.discordapp.com/embed/avatars/1.png',
 		};
 
-		const expectedEmbed = {
-			color: 0,
-			timestamp: Date().toISOString(),
-			thumbnail: {
-				url: 'https://cdn.discordapp.com/embed/avatars/1.png',
-			},
-			footer: {
-				icon_url: 'https://assets-cdn.github.com/favicon.ico',
-				text: 'Powered by discord-playtime',
-			},
-		};
+		const expectedEmbed = new RichEmbed()
+			.setColor('DEFAULT')
+			.setTimestamp()
+			.setThumbnail('https://cdn.discordapp.com/embed/avatars/1.png')
+			.setFooter('Powered by discord-playtime', 'https://assets-cdn.github.com/favicon.ico');
 
 		expect.assertions(1);
 		return expect(generateEmbeds(sourceData))
@@ -158,20 +118,12 @@ describe('EmbedHelpers', () => {
 			],
 		};
 
-		const expectedEmbed = {
-			color: 0,
-			timestamp: Date().toISOString(),
-			thumbnail: {
-				url: 'https://cdn.discordapp.com/embed/avatars/0.png',
-			},
-			footer: {
-				icon_url: 'https://assets-cdn.github.com/favicon.ico',
-				text: 'Powered by discord-playtime',
-			},
-			fields: [
-				{ name: 'General stats', value: 'Total time played: *0min*' },
-			],
-		};
+		const expectedEmbed = new RichEmbed()
+			.setColor('DEFAULT')
+			.setTimestamp()
+			.setThumbnail('https://cdn.discordapp.com/embed/avatars/0.png')
+			.setFooter('Powered by discord-playtime', 'https://assets-cdn.github.com/favicon.ico')
+			.addField('General stats', 'Total time played: *0min*');
 
 		expect.assertions(1);
 		return expect(generateEmbeds(sourceData))
@@ -186,20 +138,12 @@ describe('EmbedHelpers', () => {
 			],
 		};
 
-		const expectedEmbed = {
-			color: 0,
-			timestamp: Date().toISOString(),
-			thumbnail: {
-				url: 'https://cdn.discordapp.com/embed/avatars/0.png',
-			},
-			footer: {
-				icon_url: 'https://assets-cdn.github.com/favicon.ico',
-				text: 'Powered by discord-playtime',
-			},
-			fields: [
-				{ name: generateStringOfLength(256), value: 'Total time played: *0min*' },
-			],
-		};
+		const expectedEmbed = new RichEmbed()
+			.setColor('DEFAULT')
+			.setTimestamp()
+			.setThumbnail('https://cdn.discordapp.com/embed/avatars/0.png')
+			.setFooter('Powered by discord-playtime', 'https://assets-cdn.github.com/favicon.ico')
+			.addField(generateStringOfLength(256), 'Total time played: *0min*');
 
 		expect.assertions(1);
 		return expect(generateEmbeds(sourceData))
@@ -214,21 +158,13 @@ describe('EmbedHelpers', () => {
 			],
 		};
 
-		const expectedEmbed = {
-			color: 0,
-			timestamp: Date().toISOString(),
-			thumbnail: {
-				url: 'https://cdn.discordapp.com/embed/avatars/0.png',
-			},
-			footer: {
-				icon_url: 'https://assets-cdn.github.com/favicon.ico',
-				text: 'Powered by discord-playtime',
-			},
-			fields: [
-				{ name: 'General stats', value: generateStringOfLength(1020) },
-				{ name: '\u200B', value: generateStringOfLength(200) },
-			],
-		};
+		const expectedEmbed = new RichEmbed()
+			.setColor('DEFAULT')
+			.setTimestamp()
+			.setThumbnail('https://cdn.discordapp.com/embed/avatars/0.png')
+			.setFooter('Powered by discord-playtime', 'https://assets-cdn.github.com/favicon.ico')
+			.addField('General stats', generateStringOfLength(1020))
+			.addField('\u200B', generateStringOfLength(200));
 
 		expect.assertions(1);
 		return expect(generateEmbeds(sourceData))
@@ -244,30 +180,20 @@ describe('EmbedHelpers', () => {
 			],
 		};
 
-		const expectedEmbeds = [
-			{
-				color: 0,
-				timestamp: Date().toISOString(),
-				thumbnail: {
-					url: 'https://cdn.discordapp.com/embed/avatars/0.png',
-				},
-				footer: {
-					icon_url: 'https://assets-cdn.github.com/favicon.ico',
-					text: 'Powered by discord-playtime',
-				},
-				fields: [
-					{ name: 'General stats', value: generateStringOfLength(1020), inline: true },
-					{ name: 'General stats 2', value: generateStringOfLength(1020).toUpperCase(), inline: true },
-					{ name: '\u200B', value: generateStringOfLength(200), inline: true },
-					{ name: '\u200B', value: generateStringOfLength(200).toUpperCase(), inline: true },
-				],
-			},
-		];
+		const expectedEmbed = new RichEmbed()
+			.setColor('DEFAULT')
+			.setTimestamp()
+			.setThumbnail('https://cdn.discordapp.com/embed/avatars/0.png')
+			.setFooter('Powered by discord-playtime', 'https://assets-cdn.github.com/favicon.ico')
+			.addField('General stats', generateStringOfLength(1020), true)
+			.addField('General stats 2', generateStringOfLength(1020).toUpperCase(), true)
+			.addField('\u200B', generateStringOfLength(200), true)
+			.addField('\u200B', generateStringOfLength(200).toUpperCase(), true);
 
 		expect.assertions(1);
 		return expect(generateEmbeds(sourceData))
 			.resolves
-			.toEqual(expectedEmbeds);
+			.toEqual([expectedEmbed]);
 	});
 
 	test('Creation of more than 25 fields results in the generation of a second embed', () => {
@@ -287,7 +213,7 @@ describe('EmbedHelpers', () => {
 		};
 
 		const expectedEmbeds = [
-			{
+			new RichEmbed({
 				color: 0,
 				timestamp: Date().toISOString(),
 				thumbnail: {
@@ -298,8 +224,8 @@ describe('EmbedHelpers', () => {
 					text: 'Powered by discord-playtime',
 				},
 				fields: fields(25),
-			},
-			{
+			}),
+			new RichEmbed({
 				color: 0,
 				timestamp: Date().toISOString(),
 				thumbnail: {
@@ -310,7 +236,7 @@ describe('EmbedHelpers', () => {
 					text: 'Powered by discord-playtime',
 				},
 				fields: fields(1),
-			},
+			}),
 		];
 
 		expect.assertions(1);
@@ -330,36 +256,20 @@ describe('EmbedHelpers', () => {
 		};
 
 		const expectedEmbeds = [
-			{
-				color: 0,
-				timestamp: Date().toISOString(),
-				thumbnail: {
-					url: 'https://cdn.discordapp.com/embed/avatars/0.png',
-				},
-				footer: {
-					icon_url: 'https://assets-cdn.github.com/favicon.ico',
-					text: 'Powered by discord-playtime',
-				},
-				fields: [
-					{ name: generateStringOfLength(256), value: generateStringOfLength(1024) },
-					{ name: generateStringOfLength(256), value: generateStringOfLength(1024) },
-					{ name: generateStringOfLength(256), value: generateStringOfLength(1024) },
-				],
-			},
-			{
-				color: 0,
-				timestamp: Date().toISOString(),
-				thumbnail: {
-					url: 'https://cdn.discordapp.com/embed/avatars/0.png',
-				},
-				footer: {
-					icon_url: 'https://assets-cdn.github.com/favicon.ico',
-					text: 'Powered by discord-playtime',
-				},
-				fields: [
-					{ name: 'AA', value: generateStringOfLength(110) },
-				],
-			},
+			new RichEmbed()
+				.setColor('DEFAULT')
+				.setTimestamp()
+				.setThumbnail('https://cdn.discordapp.com/embed/avatars/0.png')
+				.setFooter('Powered by discord-playtime', 'https://assets-cdn.github.com/favicon.ico')
+				.addField(generateStringOfLength(256), generateStringOfLength(1024))
+				.addField(generateStringOfLength(256), generateStringOfLength(1024))
+				.addField(generateStringOfLength(256), generateStringOfLength(1024)),
+			new RichEmbed()
+				.setColor('DEFAULT')
+				.setTimestamp()
+				.setThumbnail('https://cdn.discordapp.com/embed/avatars/0.png')
+				.setFooter('Powered by discord-playtime', 'https://assets-cdn.github.com/favicon.ico')
+				.addField('AA', generateStringOfLength(110)),
 		];
 
 		expect.assertions(1);
