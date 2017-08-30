@@ -40,4 +40,32 @@ describe('StringHelpers', () => {
 
 		expect(stringHelpers.buildRichGameString(testGame)).resolves.toBe(expectedGameString);
 	});
+
+	test('splitAtLineBreakPoint splits before last [\\n\\r\\u2028\\u2029]', () => {
+		const testString = 'Lorem \nipsum\ndolor sit amet';
+
+		expect(stringHelpers.splitAtLineBreakPoint(testString, 15))
+			.toEqual(['Lorem \nipsum', 'dolor sit amet']);
+	});
+
+	test('splitAtLineBreakPoint splits before last [\\n\\r\\u2028\\u2029] and removes leading whitespace', () => {
+		const testString = 'Lorem\n ipsum\n dolor sit amet';
+
+		expect(stringHelpers.splitAtLineBreakPoint(testString, 15))
+			.toEqual(['Lorem\n ipsum', 'dolor sit amet']);
+	});
+
+	test('splitAtLineBreakPoint splits after last \\s', () => {
+		const testString = 'Lorem ipsum dolor sit amet';
+
+		expect(stringHelpers.splitAtLineBreakPoint(testString, 15))
+			.toEqual(['Lorem ipsum', 'dolor sit amet']);
+	});
+
+	test('splitAtLineBreakPoint splits at desired lineLength', () => {
+		const testString = 'Loremipsumdolor sit amet';
+
+		expect(stringHelpers.splitAtLineBreakPoint(testString, 10))
+			.toEqual(['Loremipsum', 'dolor sit amet']);
+	});
 });
