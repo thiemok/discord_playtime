@@ -21,15 +21,18 @@ const exportJSON = (argv: Array<string>, context: CommandContext): CommandResult
 				.then((data) => {
 					// Create buffer from string representation of data and send it
 					// $FlowIssue: Needs to be fixed in flow-typed
-					return member.send([
-						Buffer.from(JSON.stringify(data, null, '\t')),
-						'export.JSON',
-						'Data export finished',
-					]);
+					return member.send({
+						files: [{
+							attachment: Buffer.from(JSON.stringify(data, null, '\t')),
+							name: 'export.JSON',
+						}],
+						content: 'Data export finished',
+					});
 				})
 				.then(() => {
 					resolve(["psst I'm sending you a private message"]);
 				}).catch((err) => {
+					logger.error(err);
 					resolve([`\`Error: ${err}\``]);
 				});
 		} else {
