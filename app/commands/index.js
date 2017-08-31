@@ -16,7 +16,7 @@ export type CommandContext = {
 	member: GuildMember,
 	cfg: Config,
 };
-export type Command = (Array<string>, CommandContext) => Promise<StringResolvable>;
+export type Command = (Array<string>, CommandContext) => Promise<[StringResolvable]>;
 
 const commands: { [string]: Command } = {
 	Overview: overview,
@@ -53,9 +53,11 @@ const handleCommand = (msg: Message, client: Client, cfg: Config) => {
 	}
 
 	command(args.slice(1), context)
-		.then((payload) => {
-			// $FlowIssue: Needs to be fixed in flow-typed
-			(msg.channel: TextChannel).send(payload);
+		.then((payloads) => {
+			payloads.forEach((payload) => {
+				// $FlowIssue: Needs to be fixed in flow-typed
+				(msg.channel: TextChannel).send(payload);
+			});
 		}).catch(error => logger.error(error));
 };
 

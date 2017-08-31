@@ -52,7 +52,7 @@ describe('Command exportJSON', () => {
 
 		expect.assertions(2);
 		const data = await exportJSON([], context);
-		expect(data).toBe(expectedResolution);
+		expect(data).toBe([expectedResolution]);
 		expect(member.send).not.toBeCalled();
 	});
 
@@ -61,7 +61,9 @@ describe('Command exportJSON', () => {
 		member.send.mockImplementationOnce(() => erroringPromise);
 
 		expect.assertions(1);
-		return expect(exportJSON([], context)).resolves.toBe(expectedResolution);
+		return expect(exportJSON([], context))
+			.resolves
+			.toBe([expectedResolution]);
 	});
 
 	test('resolves to error msg on db error', () => {
@@ -69,6 +71,8 @@ describe('Command exportJSON', () => {
 		Session.allSessionsForGuild.mockImplementationOnce(() => erroringPromise);
 
 		expect.assertions(1);
-		return expect(exportJSON([], context)).resolves.toBe(expectedResolution);
+		return expect(exportJSON([], context))
+			.resolves
+			.toBe([expectedResolution]);
 	});
 });
