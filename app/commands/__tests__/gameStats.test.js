@@ -32,6 +32,7 @@ const client = mockClientFactory(members);
 const context = {
 	serverID,
 	client,
+	color: 'DEFAULT',
 };
 const erroringPromise = Promise.reject('Fail');
 
@@ -46,13 +47,13 @@ afterAll(() => {
 describe('Command gameStats', () => {
 
 	test('is building correctly', async () => {
-		const expectedPayload = await generateEmbeds({
+		const expectedPayload = (await generateEmbeds({
 			author: {
 				name: mockGameName,
 				url: 'https://testurl.com',
 			},
 			thumbnail: 'https://testurl.com',
-			color: members[0].highestRole.color,
+			color: members.get(0).highestRole.color,
 			fields: [
 				{
 					name: 'Overall statistics for this game:',
@@ -74,7 +75,7 @@ describe('Command gameStats', () => {
 					inline: true,
 				},
 			],
-		}).map(embed => ({ embed }));
+		})).map(embed => ({ embed }));
 
 		expect.assertions(1);
 		return expect(gameStats([mockGameName], context))
@@ -83,11 +84,11 @@ describe('Command gameStats', () => {
 	});
 
 	test('has default Thumbnail and no GameUrl if on findGameURL or findGameCover error', async () => {
-		const expectedPayload = await generateEmbeds({
+		const expectedPayload = (await generateEmbeds({
 			author: {
 				name: mockGameName,
 			},
-			color: members[0].highestRole.color,
+			color: members.get(0).highestRole.color,
 			fields: [
 				{
 					name: 'Overall statistics for this game:',
@@ -109,7 +110,7 @@ describe('Command gameStats', () => {
 					inline: true,
 				},
 			],
-		}).map(embed => ({ embed }));
+		})).map(embed => ({ embed }));
 
 		findGameURL.mockImplementationOnce(() => erroringPromise);
 		findGameCover.mockImplementationOnce(() => erroringPromise);
@@ -126,6 +127,6 @@ describe('Command gameStats', () => {
 		expect.assertions(1);
 		return expect(gameStats([members.get(1).displayName], context))
 			.resolves
-			.toBe(['`Error: Fail`']);
+			.toEqual(['`Error: Fail`']);
 	});
 });

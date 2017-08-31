@@ -36,7 +36,7 @@ describe('Command exportJSON', () => {
 
 		expect.assertions(2);
 		const data = await exportJSON([], context);
-		expect(data).toBe(expectedResolution);
+		expect(data).toEqual([expectedResolution]);
 		expect(member.send).lastCalledWith(
 			[
 				Buffer.from(JSON.stringify(Session.__getMockData(), null, '\t')),
@@ -52,7 +52,7 @@ describe('Command exportJSON', () => {
 
 		expect.assertions(2);
 		const data = await exportJSON([], context);
-		expect(data).toBe([expectedResolution]);
+		expect(data).toEqual([expectedResolution]);
 		expect(member.send).not.toBeCalled();
 	});
 
@@ -63,7 +63,7 @@ describe('Command exportJSON', () => {
 		expect.assertions(1);
 		return expect(exportJSON([], context))
 			.resolves
-			.toBe([expectedResolution]);
+			.toEqual([expectedResolution]);
 	});
 
 	test('resolves to error msg on db error', () => {
@@ -73,6 +73,6 @@ describe('Command exportJSON', () => {
 		expect.assertions(1);
 		return expect(exportJSON([], context))
 			.resolves
-			.toBe([expectedResolution]);
+			.toEqual([expectedResolution]);
 	});
 });

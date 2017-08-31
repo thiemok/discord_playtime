@@ -5,7 +5,7 @@ import { help, unknownCmd } from 'commands/misc';
 import overview from 'commands/overview';
 import userStats from 'commands/userStats';
 import logging from 'util/log';
-import type { Client, GuildMember, Message, TextChannel, StringResolvable } from 'discord.js';
+import type { ColorResolvable, Client, GuildMember, Message, TextChannel, RichEmbed } from 'discord.js';
 import type { Config } from '../index';
 
 const logger = logging('playtime:commands');
@@ -15,8 +15,12 @@ export type CommandContext = {
 	client: Client,
 	member: GuildMember,
 	cfg: Config,
+	color: ColorResolvable,
 };
-export type Command = (Array<string>, CommandContext) => Promise<[StringResolvable]>;
+
+type Sendable = string | { embed: RichEmbed };
+export type CommandResult = Promise<Sendable[]>;
+export type Command = (Array<string>, CommandContext) => CommandResult;
 
 const commands: { [string]: Command } = {
 	Overview: overview,
@@ -39,11 +43,14 @@ const handleCommand = (msg: Message, client: Client, cfg: Config) => {
 	logger.debug('Detected command\n%s', msg.content);
 	const args = msg.content.split(/\s+/g);
 
+	const clientMember = msg.guild.members.get(client.user.id);
+
 	const context = {
 		serverID: msg.guild.id,
 		client,
 		member: msg.member,
 		cfg,
+		color: clientMember ? clientMember.highestRole.color : 'DEFAULT',
 	};
 
 	const cmd = args[0].replace(cfg.commandPrefix, '');

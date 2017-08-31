@@ -31,6 +31,7 @@ const client = mockClientFactory(members);
 const context = {
 	serverID,
 	client,
+	color: 'DEFAULT',
 };
 const erroringPromise = Promise.reject('Fail');
 
@@ -45,12 +46,12 @@ afterAll(() => {
 describe('Command overview', () => {
 
 	test('is building correctly', async () => {
-		const expectedPayload = await generateEmbeds({
+		const expectedPayload = (await generateEmbeds({
 			author: {
 				name: 'Overview',
 			},
 			thumbnail: client.guilds.get('test').iconURL,
-			color: members[0].highestRole.color,
+			color: members.get(0).highestRole.color,
 			fields: [
 				{
 					name: 'General statistics for this server',
@@ -83,7 +84,7 @@ describe('Command overview', () => {
 					inline: true,
 				},
 			],
-		}).map(embed => ({ embed }));
+		})).map(embed => ({ embed }));
 
 		expect.assertions(1);
 		return expect(overview([], context))
@@ -99,7 +100,7 @@ describe('Command overview', () => {
 		expect.assertions(1);
 		return expect(overview([], context))
 			.resolves
-			.toBe(['`Error: Fail`']);
+			.toEqual(['`Error: Fail`']);
 	});
 
 	test('resolves to error message on buildRichGameString error', () => {
@@ -108,6 +109,6 @@ describe('Command overview', () => {
 		expect.assertions(1);
 		return expect(overview([], context))
 			.resolves
-			.toBe(['`Error: Fail`']);
+			.toEqual(['`Error: Fail`']);
 	});
 });

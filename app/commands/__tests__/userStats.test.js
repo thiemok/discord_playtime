@@ -28,6 +28,7 @@ const client = mockClientFactory(members);
 const context = {
 	serverID,
 	client,
+	color: 'DEFAULT',
 };
 const erroringPromise = Promise.reject('Fail');
 
@@ -43,27 +44,12 @@ describe('Command userStats', () => {
 
 	test('is building correctly', async () => {
 		const testMember = members.get(1);
-		// const expectedEmbed = initCustomRichEmbed(serverID, client)
-		// 	.setAuthor(testMember.displayName)
-		// 	.setThumbnail(testMember.user.avatarURL)
-		// 	.setTitle('Overall statistics for this user:')
-		// 	.setDescription(
-		// 		'Played a total of *' + mockGames.length + '* different games\n'
-		// 	+ 'Total time played: ' + buildTimeString(100) + '\n'
-		// 	)
-		// 	.addField(
-		// 		'Games:',
-		// 		buildRichGameString(mockGames[0]) + '\n'
-		// 	+ buildRichGameString(mockGames[1]) + '\n'
-		// 	+ buildRichGameString(mockGames[2]) + '\n',
-		// 		true
-		// 	);
-		const expectedPayload = await generateEmbeds({
+		const expectedPayload = (await generateEmbeds({
 			author: {
 				name: testMember.displayName,
 			},
 			thumbnail: testMember.user.avatarURL,
-			color: members[0].highestRole.color,
+			color: members.get(0).highestRole.color,
 			fields: [
 				{
 					name: 'Overall statistics for this user:',
@@ -85,7 +71,7 @@ describe('Command userStats', () => {
 					inline: true,
 				},
 			],
-		}).map(embed => ({ embed }));
+		})).map(embed => ({ embed }));
 
 		expect.assertions(1);
 		return expect(userStats([members.get(1).displayName], context))
@@ -100,7 +86,7 @@ describe('Command userStats', () => {
 		expect.assertions(1);
 		return expect(userStats([unknownUser], context))
 			.resolves
-			.toBe([unknownUserErrorMsg]);
+			.toEqual([unknownUserErrorMsg]);
 	});
 
 	test('resolves to error message on db error', () => {
@@ -109,7 +95,7 @@ describe('Command userStats', () => {
 		expect.assertions(1);
 		return expect(userStats([members.get(1).displayName], context))
 			.resolves
-			.toBe(['`Error: Fail`']);
+			.toEqual(['`Error: Fail`']);
 	});
 
 	test('resolves to error message on buildRichGameString error', () => {
@@ -118,6 +104,6 @@ describe('Command userStats', () => {
 		expect.assertions(1);
 		return expect(userStats([members.get(1).displayName], context))
 			.resolves
-			.toBe(['`Error: Fail`']);
+			.toEqual(['`Error: Fail`']);
 	});
 });
