@@ -203,6 +203,7 @@ describe('EmbedHelpers', () => {
 				content.push({
 					name: 'A',
 					value: 'test',
+					inline: false,
 				});
 			}
 			return content;
@@ -214,8 +215,8 @@ describe('EmbedHelpers', () => {
 
 		const expectedEmbeds = [
 			new RichEmbed({
-				color: 0,
-				timestamp: Date().toISOString(),
+				color: 57082,
+				timestamp: Date(),
 				thumbnail: {
 					url: 'https://cdn.discordapp.com/embed/avatars/0.png',
 				},
@@ -226,8 +227,8 @@ describe('EmbedHelpers', () => {
 				fields: fields(25),
 			}),
 			new RichEmbed({
-				color: 0,
-				timestamp: Date().toISOString(),
+				color: 57082,
+				timestamp: Date(),
 				thumbnail: {
 					url: 'https://cdn.discordapp.com/embed/avatars/0.png',
 				},
@@ -252,8 +253,7 @@ describe('EmbedHelpers', () => {
 				{ name: generateStringOfLength(256), value: generateStringOfLength(1024) },
 				{ name: generateStringOfLength(256), value: generateStringOfLength(1024) },
 				{ name: generateStringOfLength(256), value: generateStringOfLength(1024) },
-				{ name: generateStringOfLength(256), value: generateStringOfLength(1024) },
-				{ name: 'AA', value: generateStringOfLength(110) },
+				{ name: 'AA', value: generateStringOfLength(1024) },
 			],
 		};
 
@@ -266,14 +266,13 @@ describe('EmbedHelpers', () => {
 				.addField(generateStringOfLength(256), generateStringOfLength(1024))
 				.addField(generateStringOfLength(256), generateStringOfLength(1024))
 				.addField(generateStringOfLength(256), generateStringOfLength(1024))
-				.addField(generateStringOfLength(256), generateStringOfLength(1024))
 				.addField(generateStringOfLength(256), generateStringOfLength(1024)),
 			new RichEmbed()
 				.setColor('DEFAULT')
 				.setTimestamp()
 				.setThumbnail('https://cdn.discordapp.com/embed/avatars/0.png')
 				.setFooter('Powered by discord-playtime', 'https://assets-cdn.github.com/favicon.ico')
-				.addField('AA', generateStringOfLength(110)),
+				.addField('AA', generateStringOfLength(1024)),
 		];
 
 		expect.assertions(1);

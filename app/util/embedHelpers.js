@@ -71,8 +71,10 @@ const addFieldsToEmbed = (fields: Array<EmbedField>, embed: RichEmbed): Array<Ri
 	const embeds: Array<RichEmbed> = [];
 	const remainingFields = Array.from(fields).reverse();
 
-	let currentEmbed = new RichEmbed(Object.assign({}, embed: Object));
-	let currentContentLength = 0;
+	let currentEmbed = new RichEmbed(Object.assign({}, (embed: Object)));
+	currentEmbed.fields = [];
+
+	let currentContentLength = currentEmbed.author ? currentEmbed.author.name.length : 0;
 	let field: EmbedField;
 	while (remainingFields.length !== 0) {
 		field = remainingFields.pop();
@@ -95,10 +97,10 @@ const addFieldsToEmbed = (fields: Array<EmbedField>, embed: RichEmbed): Array<Ri
 			remainingFields.push({
 				name: '\u200B',
 				value: splittedValues[1],
-				iniline: field.inline,
+				inline: field.inline,
 			});
 
-			if (inlined) {
+			if (inlined && nextField) {
 				remainingFields.push(nextField);
 			}
 
@@ -111,8 +113,9 @@ const addFieldsToEmbed = (fields: Array<EmbedField>, embed: RichEmbed): Array<Ri
 			|| currentEmbed.fields.length >= FIELDS_LIMIT
 		) {
 			embeds.push(currentEmbed);
-			currentEmbed = new RichEmbed(Object.assign({}, embed: Object));
-			currentContentLength = 0;
+			currentEmbed = new RichEmbed(Object.assign({}, (embed: Object)));
+			currentEmbed.fields = [];
+			currentContentLength = currentEmbed.author ? currentEmbed.author.name.length : 0;
 		}
 
 		currentContentLength += (field.name.length + field.value.length);
