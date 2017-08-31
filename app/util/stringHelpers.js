@@ -16,20 +16,24 @@ export const buildTimeString = (duration: number): string => {
 	return timeString;
 };
 
+/**
+ * Builds a markdown string for the given game.
+ * If the game is found in igdb the games name will be rendered as an masked link,
+ * else it will be rendered as plain text.
+ * @param  {GameRecord}       game GameRecord representing the game to render the string for
+ * @return {Promise<string>}       markdown string containing the rendered game title
+ */
 export const buildRichGameString = (game: GameRecord): Promise<string> => {
 	const pTitle = new Promise((resolve, reject) => {
-		let entry: string = '';
 		let formattedTitle: string = '';
 
 		findGameURL(game._id)
 			.then((result) => {
 				formattedTitle = `**[${game._id}](${result})**`;
-				entry = formattedTitle + ': ' + buildTimeString(game.total);
-				resolve(entry);
+				resolve(formattedTitle);
 			}).catch((err) => {
 				formattedTitle = '**' + game._id + '**';
-				entry = formattedTitle + ': ' + buildTimeString(game.total);
-				resolve(entry);
+				resolve(formattedTitle);
 			});
 	});
 	return pTitle;
