@@ -37,13 +37,13 @@ describe('Command exportJSON', () => {
 		expect.assertions(2);
 		const data = await exportJSON([], context);
 		expect(data).toEqual([expectedResolution]);
-		expect(member.send).lastCalledWith(
-			[
-				Buffer.from(JSON.stringify(Session.__getMockData(), null, '\t')),
-				'export.JSON',
-				'Data export finished',
-			]
-		);
+		expect(member.send).lastCalledWith({
+			files: [{
+				attachment: Buffer.from(JSON.stringify(Session.__getMockData(), null, '\t')),
+				name: 'export.JSON',
+			}],
+			content: 'Data export finished',
+		});
 	});
 
 	test('resolves to insufficient permissions message for non administrators and does not send a file', async () => {
