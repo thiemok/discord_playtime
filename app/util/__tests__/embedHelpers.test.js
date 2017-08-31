@@ -48,7 +48,7 @@ describe('EmbedHelpers', () => {
 			.setTimestamp()
 			.setThumbnail('https://cdn.discordapp.com/embed/avatars/0.png')
 			.setFooter('Powered by discord-playtime', 'https://assets-cdn.github.com/favicon.ico')
-			.setAuthor('Test', 'https://discordapp.com', 'https://cdn.discordapp.com/embed/avatars/0.png');
+			.setAuthor('Test', 'https://cdn.discordapp.com/embed/avatars/0.png', 'https://discordapp.com');
 
 		expect.assertions(1);
 		return expect(generateEmbeds(sourceData))
@@ -69,7 +69,7 @@ describe('EmbedHelpers', () => {
 			.setTimestamp()
 			.setThumbnail('https://cdn.discordapp.com/embed/avatars/0.png')
 			.setFooter('Powered by discord-playtime', 'https://assets-cdn.github.com/favicon.ico')
-			.setAuthor(generateStringOfLength(256), 'https://discordapp.com', 'https://cdn.discordapp.com/embed/avatars/0.png');
+			.setAuthor(generateStringOfLength(256), 'https://cdn.discordapp.com/embed/avatars/0.png', 'https://discordapp.com');
 
 		expect.assertions(1);
 		return expect(generateEmbeds(sourceData))
@@ -251,6 +251,8 @@ describe('EmbedHelpers', () => {
 				{ name: generateStringOfLength(256), value: generateStringOfLength(1024) },
 				{ name: generateStringOfLength(256), value: generateStringOfLength(1024) },
 				{ name: generateStringOfLength(256), value: generateStringOfLength(1024) },
+				{ name: generateStringOfLength(256), value: generateStringOfLength(1024) },
+				{ name: generateStringOfLength(256), value: generateStringOfLength(1024) },
 				{ name: 'AA', value: generateStringOfLength(110) },
 			],
 		};
@@ -261,6 +263,8 @@ describe('EmbedHelpers', () => {
 				.setTimestamp()
 				.setThumbnail('https://cdn.discordapp.com/embed/avatars/0.png')
 				.setFooter('Powered by discord-playtime', 'https://assets-cdn.github.com/favicon.ico')
+				.addField(generateStringOfLength(256), generateStringOfLength(1024))
+				.addField(generateStringOfLength(256), generateStringOfLength(1024))
 				.addField(generateStringOfLength(256), generateStringOfLength(1024))
 				.addField(generateStringOfLength(256), generateStringOfLength(1024))
 				.addField(generateStringOfLength(256), generateStringOfLength(1024)),
