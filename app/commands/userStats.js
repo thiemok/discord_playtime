@@ -31,18 +31,18 @@ const userStats = (argv: Array<string>, context: CommandContext): CommandResult 
 				.then((data) => {
 					// Calculate total time played and game time msg
 					let totalPlayed: number = 0;
-					let timesMsg: string = '';
+					const timesMsgs: Array<string> = [];
 					data.forEach((game) => {
 						totalPlayed += game.total;
-						timesMsg += `${buildTimeString(game.total)}\n`;
+						timesMsgs.push(buildTimeString(game.total));
 					});
 
 					Promise.all(data.map(game => buildRichGameString(game)))
 						.then((results) => {
 							// Build games message
 							let gamesMsg: string = '';
-							results.forEach((gameEntry) => {
-								gamesMsg += gameEntry + '\n';
+							results.forEach((gameTitle, index) => {
+								gamesMsg += `${gameTitle}: ${timesMsgs[index]}\n`;
 							});
 
 							// Build general stats
@@ -57,8 +57,7 @@ const userStats = (argv: Array<string>, context: CommandContext): CommandResult 
 								color: context.color,
 								fields: [
 									{ name: 'Overall statistics for this user:', value: generalStatsMsg },
-									{ name: 'Game', value: gamesMsg.trim(), inline: true },
-									{ name: 'Time', value: timesMsg.trim(), inline: true },
+									{ name: 'Game', value: gamesMsg.trim() },
 								] })
 								.then(content => resolve(content.map(embed => ({ embed }))));
 						})

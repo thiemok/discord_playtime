@@ -10,7 +10,7 @@ import MockDate from 'mockdate';
 jest.mock('../../models/session');
 jest.mock('../../util/stringHelpers');
 
-const mockTopGames = [{ _id: 'Game1' }, { _id: 'Game2' }];
+const mockTopGames = [{ _id: 'Game1', total: 0 }, { _id: 'Game2', total: 0 }];
 Session.__setMockData({
 	topPlayers: [
 		{ _id: 1, total: 5 },
@@ -59,29 +59,14 @@ describe('Command overview', () => {
 				},
 				{
 					name: 'Top Players',
-					value: `${members.get(1).displayName}\n`
-									+ `${members.get(2).displayName}\n`
-									+ `${members.get(3).displayName}`,
-					inline: true,
-				},
-				{
-					name: 'Time',
-					value: `${buildTimeString(5)}\n`
-									+ `${buildTimeString(25)}\n`
-									+ `${buildTimeString(20)}`,
-					inline: true,
+					value: `${members.get(1).displayName}: ${buildTimeString(5)}\n`
+									+ `${members.get(2).displayName}: ${buildTimeString(25)}\n`
+									+ `${members.get(3).displayName}: ${buildTimeString(20)}`,
 				},
 				{
 					name: 'Most popular games',
-					value: `${buildRichGameString(mockTopGames[0])}\n`
-									+ `${buildRichGameString(mockTopGames[1])}`,
-					inline: true,
-				},
-				{
-					name: 'Time',
-					value: `${buildTimeString()}\n`
-									+ `${buildTimeString(0)}`,
-					inline: true,
+					value: `${buildRichGameString(mockTopGames[0]._id)}: ${buildTimeString(mockTopGames[0].total)}\n`
+									+ `${buildRichGameString(mockTopGames[1]._id)}: ${buildTimeString(mockTopGames[1].total)}`,
 				},
 			],
 		})).map(embed => ({ embed }));

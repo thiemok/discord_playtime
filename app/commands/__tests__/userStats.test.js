@@ -58,17 +58,9 @@ describe('Command userStats', () => {
 				},
 				{
 					name: 'Game',
-					value: `${buildRichGameString(mockGames[0])}\n`
-									+ `${buildRichGameString(mockGames[1])}\n`
-									+ `${buildRichGameString(mockGames[2])}`,
-					inline: true,
-				},
-				{
-					name: 'Time',
-					value: `${buildTimeString(mockGames[0].total)}\n`
-									+ `${buildTimeString(mockGames[1].total)}\n`
-									+ `${buildTimeString(mockGames[2].total)}`,
-					inline: true,
+					value: `${buildRichGameString(mockGames[0])}: ${buildTimeString(mockGames[0].total)}\n`
+									+ `${buildRichGameString(mockGames[1])}: ${buildTimeString(mockGames[1].total)}\n`
+									+ `${buildRichGameString(mockGames[2])}: ${buildTimeString(mockGames[2].total)}`,
 				},
 			],
 		})).map(embed => ({ embed }));

@@ -62,17 +62,9 @@ describe('Command gameStats', () => {
 				},
 				{
 					name: 'Player',
-					value: `${members.get(1).displayName}\n`
-									+ `${members.get(2).displayName}\n`
-									+ `${members.get(3).displayName}`,
-					inline: true,
-				},
-				{
-					name: 'Time',
-					value: `${buildTimeString(mockPlayers[0].total)}\n`
-									+ `${buildTimeString(mockPlayers[1].total)}\n`
-									+ `${buildTimeString(mockPlayers[2].total)}`,
-					inline: true,
+					value: `${members.get(1).displayName}: ${buildTimeString(mockPlayers[0].total)}\n`
+									+ `${members.get(2).displayName}: ${buildTimeString(mockPlayers[1].total)}\n`
+									+ `${members.get(3).displayName}: ${buildTimeString(mockPlayers[2].total)}`,
 				},
 			],
 		})).map(embed => ({ embed }));
@@ -97,17 +89,9 @@ describe('Command gameStats', () => {
 				},
 				{
 					name: 'Player',
-					value: `${members.get(1).displayName}\n`
-									+ `${members.get(2).displayName}\n`
-									+ `${members.get(3).displayName}`,
-					inline: true,
-				},
-				{
-					name: 'Time',
-					value: `${buildTimeString(mockPlayers[0].total)}\n`
-									+ `${buildTimeString(mockPlayers[1].total)}\n`
-									+ `${buildTimeString(mockPlayers[2].total)}`,
-					inline: true,
+					value: `${members.get(1).displayName}: ${buildTimeString(mockPlayers[0].total)}\n`
+									+ `${members.get(2).displayName}: ${buildTimeString(mockPlayers[1].total)}\n`
+									+ `${members.get(3).displayName}: ${buildTimeString(mockPlayers[2].total)}`,
 				},
 			],
 		})).map(embed => ({ embed }));

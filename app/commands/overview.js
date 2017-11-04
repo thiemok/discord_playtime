@@ -37,22 +37,22 @@ const overview = (argv: Array<string>, context: CommandContext): CommandResult =
 
 				// Fetch game links
 				Promise.all(topGames.map(game => buildRichGameString(game)))
-					.then((res) => {
+					.then((gameTitles) => {
 						// Build message parts
 						const guildMembers = guild.members;
 						let playersMsg: string = '';
-						let playersTimeMsg: string = '';
 						let member: ?GuildMember;
+
 						topPlayers.forEach((player) => {
 							member = guildMembers.get(player._id);
-							playersMsg += member ? `${member.displayName}\n` : 'unknown';
-							playersTimeMsg += `${buildTimeString(player.total)}\n`;
+							const displayName: string = member ? member.displayName : 'unknown';
+							playersMsg += `${displayName}: ${buildTimeString(player.total)}\n`;
 						});
 
-						const gamesTimeMsg = topGames
-							.map(game => `${buildTimeString(game.total)}`)
-							.join('\n');
-						const gamesMsg = res.join('\n');
+						let gamesMsg: string = '';
+						gameTitles.forEach((title, index) => {
+							gamesMsg += `${title._id}: ${buildTimeString(topGames[index].total)}\n`;
+						});
 
 						// Build the final embed
 						generateEmbeds({
@@ -66,10 +66,8 @@ const overview = (argv: Array<string>, context: CommandContext): CommandResult =
 									name: 'General statistics for this server',
 									value: `Total time played: ${buildTimeString(totalPlayed)}`,
 								},
-								{ name: 'Top Players', value: playersMsg.trim(), inline: true },
-								{ name: 'Time', value: playersTimeMsg.trim(), inline: true },
-								{ name: 'Most popular games', value: gamesMsg, inline: true },
-								{ name: 'Time', value: gamesTimeMsg, inline: true },
+								{ name: 'Top Players', value: playersMsg.trim() },
+								{ name: 'Most popular games', value: gamesMsg.trim() },
 							],
 						})
 							.then(content => resolve(content.map(embed => ({ embed }))));

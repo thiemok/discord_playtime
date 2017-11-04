@@ -29,15 +29,14 @@ const gameStats = (argv: Array<string>, context: CommandContext): CommandResult 
 				const guildMembers = guild.members;
 				let totalPlayed: number = 0;
 				let playersMsg: string = '';
-				let playersTimeMsg: string = '';
 				let displayName: string = '';
 				let member: ?GuildMember;
+
 				data.forEach((player) => {
 					member = guildMembers.get(player._id);
 					totalPlayed += player.total;
-					displayName = (member != null) ? member.displayName : '';
-					playersMsg += `${displayName}\n`;
-					playersTimeMsg += `${buildTimeString(player.total)}\n`;
+					displayName = (member != null) ? member.displayName : 'unknown';
+					playersMsg += `${displayName}: ${buildTimeString(player.total)}\n`;
 				});
 
 				// Build general stats
@@ -54,8 +53,7 @@ const gameStats = (argv: Array<string>, context: CommandContext): CommandResult 
 							name: 'Overall statistics for this game:',
 							value: generalStatsMsg,
 						},
-						{ name: 'Player', value: playersMsg.trim(), inline: true },
-						{ name: 'Time', value: playersTimeMsg.trim(), inline: true },
+						{ name: 'Player', value: playersMsg.trim() },
 					],
 				};
 
